@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using Xamino.Pages;
 
 namespace Xamino
 {
@@ -12,8 +8,9 @@ namespace Xamino
 		public App ()
 		{
 			InitializeComponent();
+            SetupIoc();
 
-			MainPage = new Xamino.MainPage();
+			MainPage = new MainPage();
 		}
 
 		protected override void OnStart ()
@@ -30,5 +27,14 @@ namespace Xamino
 		{
 			// Handle when your app resumes
 		}
-	}
+
+        #region Setup IOC
+
+	    private void SetupIoc()
+	    {
+
+	    }
+
+	    #endregion
+    }
 }
