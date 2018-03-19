@@ -251,3 +251,6 @@ Resource.Designer.cs
 
 # Xamarin Components
 Components/
+
+# VSCode
+.vscode/
