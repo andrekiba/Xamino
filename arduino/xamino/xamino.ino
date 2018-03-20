@@ -51,7 +51,7 @@ void listenForCommandsTask();
 Task listenTask(200, TASK_FOREVER, &listenForCommandsTask, &hpr, true);
 
 void execStreamTask();
-Task streamTask(1000, TASK_FOREVER, &execStreamTask, &r);
+Task streamTask(2000, TASK_FOREVER, &execStreamTask, &r);
 
 #pragma endregion
 
@@ -185,7 +185,7 @@ void listenForCommandsTask(){
 	{
 		//clientAlreadyConnected = true;
 		//cmdCallback.loopCmdProcessing(&cmdParser, &cmdBuffer, &wifiSerial);
-		if(cmdBuffer.readFromSerial(&wifiSerial, 1000))
+		if(cmdBuffer.readFromSerial(&wifiSerial, 2000))
 		{
 			if (cmdParser.parseCmd(&cmdBuffer) != CMDPARSER_ERROR) {
 
@@ -225,6 +225,7 @@ void listenForCommandsTask(){
 			{
 				client.flush();
 				Serial.println("Parser error!");
+				client.println("Unrecognized Command!");
 			}
 		}
 	}	
