@@ -5,9 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EspTouchSmartConfigXamarin" Version="1.0.4" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="FodyWeavers.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
     <PackageReference Include="Plugin.Permissions" Version="2.2.1" />
-    <PackageReference Include="rda.SocketsForPCL" Version="2.0.2" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.2.9" />
     <PackageReference Include="SocketLite.PCL" Version="4.1.5" />
     <PackageReference Include="System.Reactive" Version="3.1.1" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
@@ -24,8 +38,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Base\" />
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
+    <EmbeddedResource Update="Pages\CommandPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

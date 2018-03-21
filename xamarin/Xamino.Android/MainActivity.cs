@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
@@ -17,6 +18,9 @@ namespace Xamino.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            UserDialogs.Init(this);
+
             LoadApplication(new App());
         }
 

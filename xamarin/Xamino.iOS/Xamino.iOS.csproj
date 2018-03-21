@@ -119,14 +119,14 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EspTouchSmartConfigXamarin">
-      <Version>1.0.4</Version>
+    <PackageReference Include="Acr.UserDialogs">
+      <Version>7.0.1</Version>
     </PackageReference>
     <PackageReference Include="Plugin.Permissions">
       <Version>2.2.1</Version>
     </PackageReference>
-    <PackageReference Include="rda.SocketsForPCL">
-      <Version>2.0.2</Version>
+    <PackageReference Include="PropertyChanged.Fody">
+      <Version>2.2.9</Version>
     </PackageReference>
     <PackageReference Include="SocketLite.PCL">
       <Version>4.1.5</Version>
@@ -145,5 +145,8 @@
       <Project>{A96EDA2B-8FBF-40B2-AF68-E070E3D7EEB0}</Project>
       <Name>Xamino</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Xamino.Pages.CommandPage"
+             x:Name="CommandPageName"
+             BackgroundColor="{StaticResource Grey800}"
+             BindingContext="{x:Reference CommandPageName}"
+             Title="Xamino">
+
+    <ScrollView Orientation="Vertical">
+        <StackLayout Orientation="Vertical" Padding="20" Spacing="30" HorizontalOptions="Fill">
+            <StackLayout Orientation="Vertical" Spacing="20">
+                <StackLayout Orientation="Vertical" Padding="5,0">
+                    <Label Text="Address" Style="{StaticResource BaseLabelStyle}"/>
+                    <Entry Text="{Binding Address}" Style="{StaticResource BaseEntryStyle}"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" Padding="5,0">
+                    <Label Text="Port" Style="{StaticResource BaseLabelStyle}"/>
+                    <Entry Text="{Binding Port}" Style="{StaticResource BaseEntryStyle}"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical" Padding="5,0">
+                    <Label Text="Input command" Style="{StaticResource BaseLabelStyle}"/>
+                    <Entry Text="{Binding Command}" Style="{StaticResource BaseEntryStyle}"/>
+                </StackLayout>
+            </StackLayout>
+
+            <Button Text="SEND" Style="{StaticResource BaseButtonStyle}" Clicked="SendButtonOnClicked"/>
+
+            <StackLayout Orientation="Vertical" Padding="5,0" VerticalOptions="FillAndExpand">
+                <Label Text="Response" Style="{StaticResource BaseLabelStyle}" TextColor="White"/>
+                <Frame BackgroundColor="{StaticResource Teal}" HasShadow="False"
+                       Padding="1.5" CornerRadius="3">
+                    <Frame BackgroundColor="{StaticResource Grey800}" HasShadow="False"
+                           CornerRadius="3" Padding="15,10">
+                        <Label LineBreakMode="WordWrap" HeightRequest="100" Text="{Binding Response}"
+                               Style="{StaticResource BaseLabelStyle}"/>
+                    </Frame>
+                </Frame>
+
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
+    
+
+</ContentPage>

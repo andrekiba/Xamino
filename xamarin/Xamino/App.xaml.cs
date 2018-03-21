@@ -1,6 +1,8 @@
 ﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 using Xamino.Pages;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Xamino
 {
 	public partial class App : Application
@@ -8,9 +10,12 @@ namespace Xamino
 		public App ()
 		{
 			InitializeComponent();
-            SetupIoc();
 
-			MainPage = new MainPage();
+			MainPage = new NavigationPage(new CommandPage())
+			{
+                BarBackgroundColor = (Color) Application.Current.Resources["Teal"],
+                BarTextColor = Color.White
+			};
 		}
 
 		protected override void OnStart ()
@@ -27,14 +32,5 @@ namespace Xamino
 		{
 			// Handle when your app resumes
 		}
-
-        #region Setup IOC
-
-	    private void SetupIoc()
-	    {
-
-	    }
-
-	    #endregion
     }
 }
