@@ -43,33 +43,6 @@
             <Color x:Key="BlueGray">#607d8b</Color>
             <Color x:Key="Grey800">#424242</Color>
 
-            <Style x:Key="BaseButtonStyle" TargetType="Button">
-                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="HeightRequest" Value="50"/>
-                <Setter Property="WidthRequest" Value="200"/>
-                <Setter Property="MinimumWidthRequest" Value="300"/>
-                <!--<Setter Property="BorderColor" Value="{StaticResource LightGreen}"/>-->
-                <!--<Setter Property="BorderWidth" Value="1"/>-->
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="BorderRadius" Value="3" />
-                <Setter Property="FontSize" Value="Large" />
-                <Setter Property="BackgroundColor" Value="{StaticResource Teal}" />
-            </Style>
-            <Style x:Key="BaseLabelStyle" TargetType="Label">
-                <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="HeightRequest" Value="30"/>
-                <Setter Property="TextColor" Value="{StaticResource Teal}" />
-                <Setter Property="FontSize" Value="Medium" />
-            </Style>
-            <Style x:Key="BaseEntryStyle" TargetType="Entry">
-                <Setter Property="HorizontalOptions" Value="Fill"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="FontSize" Value="Medium" />
-            </Style>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

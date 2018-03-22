@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,10 +27,10 @@ namespace Xamino.Base
                 stackTrace = e.StackTrace;
             }
 
-            if (!error.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(error))
             {
                 var message = new StringBuilder();
-                if (!exceptionHeader.IsNullOrWhiteSpace())
+                if (!string.IsNullOrWhiteSpace(exceptionHeader))
                     message.AppendLine(string.Concat(exceptionHeader, ":"));
                 message.AppendLine(error);
                 Debug.WriteLine(error);
@@ -40,7 +39,7 @@ namespace Xamino.Base
                 return false;
             }
 
-            if (!successMessage.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(successMessage))
                 await UserDialogs.Instance.AlertAsync(successMessage, "Conferma", "OK");
             return true;
         }

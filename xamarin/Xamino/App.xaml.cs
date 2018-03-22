@@ -11,11 +11,7 @@ namespace Xamino
 		{
 			InitializeComponent();
 
-			MainPage = new NavigationPage(new CommandPage())
-			{
-                BarBackgroundColor = (Color) Application.Current.Resources["Teal"],
-                BarTextColor = Color.White
-			};
+			MainPage = new MainPage();
 		}
 
 		protected override void OnStart ()
