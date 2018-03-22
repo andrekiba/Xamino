@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Plugin.Connectivity;
@@ -54,49 +56,71 @@ namespace Xamino.Pages
 	    {
 	        if (!CanSendCommand())
 	        {
-	            await UserDialogs.Instance.AlertAsync("Compila correttamente i campi!", "Error", "OK");
+	            await UserDialogs.Instance.AlertAsync("Compila correttamente i campi!", "Errore", "OK");
                 return;
 	        }
 
 	        if (!CrossConnectivity.Current.IsConnected)
 	        {
-	            await UserDialogs.Instance.AlertAsync("Sei offline!", "Error", "OK");
+	            await UserDialogs.Instance.AlertAsync("Sei offline!", "Errore", "OK");
 	            return;
 	        }
 
 	        if (await ExecSendCommand())
+	        {
 	            Command = string.Empty;
+            }	        
 	    }
 
 	    private async Task<bool> ExecSendCommand()
 	    {
 	        var command = $"{Command}\n";
 	        var tcpClient = new TcpSocketClient();
+	        var result = false;
 
-	        return await AsyncHelper.DoAction(async () =>
+	        using (var progress = UserDialogs.Instance.Loading("Invio..."))
 	        {
-                //await tcpClient.ConnectAsync(Address, Port);
-                //var bytes = Encoding.ASCII.GetBytes(command);
-                //await tcpClient.WriteStream.WriteAsync(bytes, 0, bytes.Length);
+	            result = await AsyncHelper.DoAction(async () =>
+	            {
+	                //await tcpClient.ConnectAsync(Address, Port);
+	                //var bytes = Encoding.ASCII.GetBytes(command);
+	                //await tcpClient.WriteStream.WriteAsync(bytes, 0, bytes.Length);
+	                await Task.Delay(TimeSpan.FromSeconds(3));
+	                progress.Title = "Ricezione...";
+	                await Task.Delay(TimeSpan.FromSeconds(3));
 
-                //if (tcpClient.IsConnected)
-                //{
-                //    var cts = new CancellationTokenSource();
-                //    cts.CancelAfter(TimeSpan.FromSeconds(10));
+                }, "Problema invio comando");
+            }
 
-                //    var readBuffer = new byte[tcpClient.ReadStream.Length];
+	        if (!result)
+	            return false;
 
-                //    await tcpClient.ReadStream.ReadAsync(readBuffer, 0, (int)tcpClient.ReadStream.Length, cts.Token);
+	        using (var receiving = UserDialogs.Instance.Loading("Ricezione..."))
+	        {
+	            //if (tcpClient.IsConnected)
+	            //{
+	            //    var cts = new CancellationTokenSource();
+	            //    cts.CancelAfter(TimeSpan.FromSeconds(10));
 
-                //    Response = Encoding.ASCII.GetString(readBuffer);
-                //}
+	            //    var readBuffer = new byte[tcpClient.ReadStream.Length];
 
-                //tcpClient.Disconnect();
+	            //    await tcpClient.ReadStream.ReadAsync(readBuffer, 0, (int)tcpClient.ReadStream.Length, cts.Token);
 
-	            await Task.Delay(TimeSpan.FromSeconds(2));
+	            //    Response = Encoding.ASCII.GetString(readBuffer);
+	            //}
+
+	            //tcpClient.Disconnect();
+
+	            result = await AsyncHelper.DoAction(async () =>
+	            {
+	                await Task.Delay(TimeSpan.FromSeconds(3));
+	            }, "Problema in ricezione", "Ricevuto!");
+            }
+
+	        if (result)
 	            Response = "CIAO!";
 
-	        }, "Problema invio comando", "Comando inviato!");
+	        return result;
 	    }
     }
 }

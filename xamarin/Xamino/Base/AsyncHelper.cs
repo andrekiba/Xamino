@@ -36,12 +36,12 @@ namespace Xamino.Base
                 message.AppendLine(error);
                 Debug.WriteLine(error);
                 Debug.WriteLine(stackTrace);
-                await UserDialogs.Instance.AlertAsync(message.ToString(), "Error", "OK");
+                await UserDialogs.Instance.AlertAsync(message.ToString(), "Errore", "OK");
                 return false;
             }
 
             if (!successMessage.IsNullOrWhiteSpace())
-                await UserDialogs.Instance.AlertAsync(successMessage, "Confirm", "OK");
+                await UserDialogs.Instance.AlertAsync(successMessage, "Conferma", "OK");
             return true;
         }
     }
