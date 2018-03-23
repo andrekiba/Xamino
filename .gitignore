@@ -238,7 +238,7 @@ Thumbs.db
 
 # MFractor
 *.droidres/
-\.mfractor/\.xamino\.db
+*.db
 
 # Xamarin Android Resource.Designer.cs
 Resource.Designer.cs
