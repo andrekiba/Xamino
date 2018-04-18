@@ -5,16 +5,26 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Plugin.Connectivity;
 using SocketLite.Services;
+using SocketLite.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamino.Base;
+using System.Linq;
+using System.Net.Sockets;
+using System.IO;
 
 namespace Xamino.Pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CommandPage : ContentPage
 	{
-		public CommandPage ()
+        #region Fields
+
+        private TcpSocketListener tcpListener;
+
+        #endregion
+
+        public CommandPage ()
 		{
 			InitializeComponent ();
 		}
@@ -25,19 +35,6 @@ namespace Xamino.Pages
 	    public string Port { get; set; }
 	    public string Command { get; set; }
 	    public string Response { get; set; }
-
-        #endregion
-
-        #region Commands
-
-	    //private ICommand sendCommand;
-	    //public ICommand SendCommand => sendCommand ?? (sendCommand = new Command(
-	    //async () =>
-	    //{
-	    //    var command = $"{Command}\n";
-	    //    await DisplayAlert("Command", "Comando inviato", "OK");
-	    //},
-	    //CanSendCommand));
 
         #endregion
 
@@ -74,25 +71,56 @@ namespace Xamino.Pages
 
 	    private async Task<bool> ExecSendCommand()
 	    {
-	        var command = $"{Command}\n";
+            #region TCP listener
+
+            //var communicationInterface = new CommunicationsInterface();
+            //var allInterfaces = communicationInterface.GetAllInterfaces();
+            //var networkInterface = allInterfaces.FirstOrDefault(x => x.IpAddress == Address);
+
+            //tcpListener = new TcpSocketListener();
+
+            //var obseravbleListener = await tcpListener.CreateObservableListener(80, networkInterface, false);
+
+            //var subscriberTcpListener = obseravbleListener.Subscribe(
+                //client =>
+                //{
+                //    //Insert your code here
+                //},
+                //ex =>
+                //{
+                //    // Insert your exception code here
+                //    Console.WriteLine("Error!");
+                //},
+                //() =>
+                //{
+                //    // Insert your completed code here
+                //    Console.WriteLine("End!");
+                //});
+
+            #endregion
+
+            var command = $"{Command}\n";
 	        var tcpClient = new TcpSocketClient();
-	        var result = false;
+	        var ok = false;
 
 	        using (var sending = UserDialogs.Instance.Loading("Invio..."))
 	        {
-	            result = await AsyncHelper.DoFunc(async () =>
+	            ok = await AsyncHelper.DoFunc(async () =>
 	            {
 	                await tcpClient.ConnectAsync(Address, Port);
 	                var bytes = Encoding.ASCII.GetBytes(command);
 	                await tcpClient.WriteStream.WriteAsync(bytes, 0, bytes.Length);
-                }, "Problema invio comando", "Inviato!");
+                }, "Problema invio comando");
             }
 
-	        if (!result)
+	        //se l'invio non è andato a buon fine non aspetto la risposta
+            if (!ok)
 	            return false;
 
-	        await Task.Delay(TimeSpan.FromMilliseconds(500));
+            //do tempo ad arduino di scrivere la risposta
+            await Task.Delay(TimeSpan.FromSeconds(3));
 
+            //verifico di essere ancora connesso
 	        if (tcpClient.IsConnected)
 	        {
 	            using (var receiving = UserDialogs.Instance.Loading("Ricezione..."))
@@ -100,21 +128,22 @@ namespace Xamino.Pages
 	                var cts = new CancellationTokenSource();
 	                cts.CancelAfter(TimeSpan.FromSeconds(2));
 
-	                result = await AsyncHelper.DoFunc(async () =>
+	                ok = await AsyncHelper.DoFunc(async () =>
 	                {
-	                    var readBuffer = new byte[tcpClient.ReadStream.Length];
-	                    await tcpClient.ReadStream.ReadAsync(readBuffer, 0, (int) tcpClient.ReadStream.Length, cts.Token);
-	                    Response = Encoding.ASCII.GetString(readBuffer);
-
+                        if (tcpClient.ReadStream.CanRead)
+                        {
+                            var bytes = await ((NetworkStream)tcpClient.ReadStream).ReadFullyAsync(cts.Token);
+                            Response = Encoding.ASCII.GetString(bytes);
+                        }
 	                }, "Problema in ricezione", "Ricevuto!");
 	            }
 
 	            tcpClient.Disconnect();
 	        }
 	        else
-	            result = false;
+	            ok = false;
 
-	        return result;
+	        return ok;
 	    }
     }
 }
