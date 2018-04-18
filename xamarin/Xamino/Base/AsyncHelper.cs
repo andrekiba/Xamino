@@ -9,14 +9,14 @@ namespace Xamino.Base
 {
     public static class AsyncHelper
     {
-        public static async Task<bool> DoAction(Func<Task> action, string exceptionHeader = null, string successMessage = null)
+        public static async Task<bool> DoFunc(Func<Task> func, string exceptionHeader = null, string successMessage = null)
         {
             string error = null;
             string stackTrace = null;
 
             try
             {
-                await action();
+                await func();
             }
             catch (OperationCanceledException)
             {

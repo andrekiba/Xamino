@@ -78,47 +78,41 @@ namespace Xamino.Pages
 	        var tcpClient = new TcpSocketClient();
 	        var result = false;
 
-	        using (var progress = UserDialogs.Instance.Loading("Invio..."))
+	        using (var sending = UserDialogs.Instance.Loading("Invio..."))
 	        {
-	            result = await AsyncHelper.DoAction(async () =>
+	            result = await AsyncHelper.DoFunc(async () =>
 	            {
-	                //await tcpClient.ConnectAsync(Address, Port);
-	                //var bytes = Encoding.ASCII.GetBytes(command);
-	                //await tcpClient.WriteStream.WriteAsync(bytes, 0, bytes.Length);
-	                await Task.Delay(TimeSpan.FromSeconds(3));
-	                progress.Title = "Ricezione...";
-	                await Task.Delay(TimeSpan.FromSeconds(3));
-
-                }, "Problema invio comando");
+	                await tcpClient.ConnectAsync(Address, Port);
+	                var bytes = Encoding.ASCII.GetBytes(command);
+	                await tcpClient.WriteStream.WriteAsync(bytes, 0, bytes.Length);
+                }, "Problema invio comando", "Inviato!");
             }
 
 	        if (!result)
 	            return false;
 
-	        using (var receiving = UserDialogs.Instance.Loading("Ricezione..."))
+	        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+	        if (tcpClient.IsConnected)
 	        {
-	            //if (tcpClient.IsConnected)
-	            //{
-	            //    var cts = new CancellationTokenSource();
-	            //    cts.CancelAfter(TimeSpan.FromSeconds(10));
-
-	            //    var readBuffer = new byte[tcpClient.ReadStream.Length];
-
-	            //    await tcpClient.ReadStream.ReadAsync(readBuffer, 0, (int)tcpClient.ReadStream.Length, cts.Token);
-
-	            //    Response = Encoding.ASCII.GetString(readBuffer);
-	            //}
-
-	            //tcpClient.Disconnect();
-
-	            result = await AsyncHelper.DoAction(async () =>
+	            using (var receiving = UserDialogs.Instance.Loading("Ricezione..."))
 	            {
-	                await Task.Delay(TimeSpan.FromSeconds(3));
-	            }, "Problema in ricezione", "Ricevuto!");
-            }
+	                var cts = new CancellationTokenSource();
+	                cts.CancelAfter(TimeSpan.FromSeconds(2));
 
-	        if (result)
-	            Response = "CIAO!";
+	                result = await AsyncHelper.DoFunc(async () =>
+	                {
+	                    var readBuffer = new byte[tcpClient.ReadStream.Length];
+	                    await tcpClient.ReadStream.ReadAsync(readBuffer, 0, (int) tcpClient.ReadStream.Length, cts.Token);
+	                    Response = Encoding.ASCII.GetString(readBuffer);
+
+	                }, "Problema in ricezione", "Ricevuto!");
+	            }
+
+	            tcpClient.Disconnect();
+	        }
+	        else
+	            result = false;
 
 	        return result;
 	    }
