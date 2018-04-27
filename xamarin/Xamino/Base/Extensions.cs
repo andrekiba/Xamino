@@ -33,18 +33,37 @@ namespace Xamino.Base
 
             try
             {
-                while(stream.DataAvailable)
+                while (stream.DataAvailable)
                 {
                     bytes.Add((byte)stream.ReadByte());
                 }
                 tcs.SetResult(bytes.ToArray());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                tcs.SetException(ex);  
+                tcs.SetException(ex);
             }
 
             return tcs.Task;
+        }
+
+        public static byte[] ReadFully(this NetworkStream stream)
+        {
+            var bytes = new List<byte>();
+
+            try
+            {
+                while (stream.DataAvailable)
+                {
+                    bytes.Add((byte)stream.ReadByte());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return bytes.ToArray();
         }
     }
 }
